@@ -1,0 +1,6 @@
+secrets:
+  server_username: ""
+  server_password: ""
+  parentPage_notionID: ""
+  notion_api_key: ""
+  azure_api_key: ""
