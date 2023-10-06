@@ -11,13 +11,13 @@ with open('config/configuration.yaml', 'r') as file:
 
 def main():
     edition_date = input("What is the date for your desired weekly edition (It should be a Saturday)? Ex: YYYY-MM-DD ")
+    links = parse_links(secrets, edition_date)
+    articles = parse_articles(secrets, links).to_dict('records')
+    summaries = ai_summarization(secrets, articles)
+    notion_pages = parse_links(secrets, edition_date, summaries)
+    notion_pages
+    return 0
     
-        # commenting out to save time
-        #links = parse_links(secrets, edition_date)
-        # articles = parse_articles(secrets, links)
-    
-    articles = pd.read_csv("articles.csv")
-    ai_summarization(secrets, articles)
 if __name__ == '__main__':
     main()
 

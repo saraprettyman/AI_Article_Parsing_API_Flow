@@ -13,12 +13,13 @@ def parse_articles(secrets, links):
 
         title = html[start_index:end_index]
 
-        start_substring = '"articleBody":"'
+        start_substring = ',"articleBody":"'
         start_index = html.find(start_substring) + len(start_substring)
+        html = html[start_index:]
         end_index = html.find('","')
         
         article = html[start_index:end_index]
+        print(article)
         articles.append([title, article, "https://www.economist.com/" + links[i],""])
         i += 1
-    articles_data_table = pd.DataFrame(articles, columns = ['title', 'article', 'link', 'summary'])
-    return articles_data_table
+    return pd.DataFrame(articles, columns = ["title", "article", "link", "summary"])
