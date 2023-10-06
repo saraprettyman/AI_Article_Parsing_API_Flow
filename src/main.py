@@ -11,13 +11,10 @@ with open('config/configuration.yaml', 'r') as file:
     secrets = yaml.safe_load(file)
 
 def main():
-    # edition_date = input("What is the date for your desired weekly edition (It should be a Saturday)? Ex: YYYY-MM-DD ")
-    # links = parse_links(secrets, edition_date)
-    # articles = parse_articles(secrets, links).to_dict('records')
-    # summaries = ai_summarization(secrets, articles)
-
-    edition_date = "2023-10-07"
-    page_info = pd.read_csv('articles1.csv').drop(columns=['Unnamed: 0'])
+    edition_date = input("What is the date for your desired weekly edition (It should be a Saturday)? Ex: YYYY-MM-DD ")
+    links = parse_links(secrets, edition_date)
+    articles = parse_articles(secrets, links).to_dict('records')
+    page_info = ai_summarization(secrets, articles)
     notion_pages(secrets, edition_date, page_info)
     return 0
     

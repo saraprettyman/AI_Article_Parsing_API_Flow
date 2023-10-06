@@ -46,6 +46,7 @@ def subpages(secrets, page_info, parent_page_id):
     link = page_info[2]
     summary = page_info[3]
 
+    # Design of how each subpage will look 
     payload = json.dumps(
         {
         "parent": {
@@ -130,9 +131,11 @@ def subpages(secrets, page_info, parent_page_id):
 
 
 def notion_pages(secrets, edition_date, page_info):
+    i = 0
+    # create parent page
     parent_page_id = edition_page(secrets, edition_date)
 
-    i = 0
+    # create subpages
     while i < len(page_info):
         subpages(secrets, page_info.iloc[i], parent_page_id)
         i += 1

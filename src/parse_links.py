@@ -21,6 +21,9 @@ def get_html(secrets, subfolder):
     # The session is now logged in and can be used to retrieve content
     response = session.get(website + subfolder)
 
+    # Close session to free up system resources 
+    r.close()
+
     return response.text
 
 

@@ -53,7 +53,7 @@ def ai_summarization(secrets, articles):
     azure_api_key = secrets['secrets']['azure_api_key']
 
     while i < len(articles):
-        # post query, get operation location url 
+        # post query to azure, get operation location url 
         op_location = post_api_query(azure_api_key, articles[i]['article']).headers['Operation-Location']
 
         # retrieve response from operation location url
@@ -70,4 +70,5 @@ def ai_summarization(secrets, articles):
         articles[i]['summary'] = get_response[start_index:end_index]
 
         i+=1
+    # dict form is no longer required; return to dataframe
     return pd.DataFrame(articles)

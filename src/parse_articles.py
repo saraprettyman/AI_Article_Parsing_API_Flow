@@ -2,9 +2,10 @@ import pandas as pd
 from parse_links import get_html
 
 def parse_articles(secrets, links):
-    # loop through links
     i = 0
     articles = []
+    
+    # extract article and article title from html
     while i < len(links):
         html = get_html(secrets, links[i])
         start_substring = '<!DOCTYPE html><html lang="en"><head><meta charSet="utf-8"/><meta name="viewport" content="width=device-width"/><title>'
@@ -22,4 +23,5 @@ def parse_articles(secrets, links):
         print(article)
         articles.append([title, article, "https://www.economist.com/" + links[i],""])
         i += 1
+     # create a dataframe with each articles information
     return pd.DataFrame(articles, columns = ["title", "article", "link", "summary"])
