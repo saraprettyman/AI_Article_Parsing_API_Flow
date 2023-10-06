@@ -1,8 +1,8 @@
 import requests as r
 
-def get_html(data, subfolder):
-    username = data['secrets']['server_username']
-    password = data['secrets']['server_password']
+def get_html(secrets, subfolder):
+    username = secrets['secrets']['server_username']
+    password = secrets['secrets']['server_password']
     
     website = "https://www.economist.com/"
 
@@ -25,10 +25,10 @@ def get_html(data, subfolder):
 
 
 
-def parse_links(data, edition_date):
+def parse_links(secrets, edition_date):
     subfolder = 'weeklyedition/' + edition_date
 
-    html = get_html(data, subfolder)
+    html = get_html(secrets, subfolder)
   
     # isolate the links that in a specific section of the webpage
     start_substring = '<div class="teaser-weekly-edition--leaders css-12dw4ef ekfon2k0">'
@@ -53,8 +53,8 @@ def parse_links(data, edition_date):
     list_of_links = []
     while i < len(positions):
         sub_text = sub_html[positions[i]:]
-        end_index = html.find('">')
-        link = sub_text[:end_index]
+        end_index = sub_text.find('">')
+        link = sub_text[0:end_index]
         list_of_links.append(link)
         i += 1
     return list_of_links
