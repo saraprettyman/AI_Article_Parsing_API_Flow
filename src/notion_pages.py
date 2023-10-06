@@ -1,7 +1,6 @@
 import requests
 import json
 
-
 def edition_page(secrets, edition_date):
     main_page_notionID = secrets['secrets']['parentPage_notionID']
     notion_api_key = secrets['secrets']['notion_api_key']
@@ -128,7 +127,6 @@ def subpages(secrets, page_info, parent_page_id):
     response = requests.request("POST", url, headers=headers, data=payload)
 
     return 0
-
 
 def notion_pages(secrets, edition_date, page_info):
     i = 0

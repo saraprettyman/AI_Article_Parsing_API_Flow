@@ -23,5 +23,6 @@ def parse_articles(secrets, links):
         print(article)
         articles.append([title, article, "https://www.economist.com/" + links[i],""])
         i += 1
+        
      # create a dataframe with each articles information
     return pd.DataFrame(articles, columns = ["title", "article", "link", "summary"])
