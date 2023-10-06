@@ -20,20 +20,41 @@ def get_html(data, subfolder):
 
     # The session is now logged in and can be used to retrieve content
     response = session.get(website + subfolder)
-    
-    html_content = response.text
 
-    # Open the file in write mode
-    file = open('output.html', 'w')
+    return response.text
 
-    # Write the HTML content to the file
-    file.write(html_content)
 
-    # Close the file
-    file.close()
-
-    return 0
 
 def parse_links(data, edition_date):
     subfolder = 'weeklyedition/' + edition_date
-    get_html(data, subfolder)
+
+    html = get_html(data, subfolder)
+  
+    # isolate the links that in a specific section of the webpage
+    start_substring = '<div class="teaser-weekly-edition--leaders css-12dw4ef ekfon2k0">'
+    start_index = html.find(start_substring) + len(start_substring)
+    end_index = html.find('</main>')
+
+    sub_html = html[start_index:end_index]
+    
+    # find link indexes
+    positions = []
+    link_index = 0
+    substring = '<a href="/'
+    while True:
+        link_index = sub_html.find(substring, link_index)
+        if link_index == -1: 
+            break
+        link_index += len(substring)
+        positions.append(link_index)
+
+    # find links
+    i = 0
+    list_of_links = []
+    while i < len(positions):
+        sub_text = sub_html[positions[i]:]
+        end_index = html.find('">')
+        link = sub_text[:end_index]
+        list_of_links.append(link)
+        i += 1
+    return list_of_links
