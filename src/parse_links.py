@@ -26,8 +26,6 @@ def get_html(secrets, subfolder):
 
     return response.text
 
-
-
 def parse_links(secrets, edition_date):
     subfolder = 'weeklyedition/' + edition_date
 

@@ -1,4 +1,4 @@
-# Import neccessary libraries
+# Import libraries
 import yaml
 from parse_links import parse_links
 from parse_articles import parse_articles
