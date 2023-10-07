@@ -5,7 +5,7 @@ def parse_articles(secrets, links):
     i = 0
     articles = []
     
-    # extract article and article title from html
+    # extract article and article title from html to add to list
     while i < len(links):
         html = get_html(secrets, links[i])
         start_substring = '<!DOCTYPE html><html lang="en"><head><meta charSet="utf-8"/><meta name="viewport" content="width=device-width"/><title>'
