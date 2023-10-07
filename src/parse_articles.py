@@ -20,9 +20,7 @@ def parse_articles(secrets, links):
         end_index = html.find('","')
         
         article = html[start_index:end_index]
-        print(article)
         articles.append([title, article, "https://www.economist.com/" + links[i],""])
         i += 1
-        
      # create a dataframe with each articles information
     return pd.DataFrame(articles, columns = ["title", "article", "link", "summary"])

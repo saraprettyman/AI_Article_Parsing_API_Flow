@@ -4,3 +4,4 @@ secrets:
   parentPage_notionID: ""
   notion_api_key: ""
   azure_api_key: ""
+  azure_service_endpoint:
