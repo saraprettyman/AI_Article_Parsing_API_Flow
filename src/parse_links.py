@@ -1,4 +1,5 @@
 import requests as r
+from bs4 import BeautifulSoup as bs
 
 def get_html(secrets, subfolder):
     username = secrets['secrets']['server_username']
@@ -32,27 +33,11 @@ def parse_links(secrets, edition_date):
     start_substring = '<div class="teaser-weekly-edition--leaders css-12dw4ef ekfon2k0">'
     start_index = html.find(start_substring) + len(start_substring)
     end_index = html.find('</main>')
-
     sub_html = html[start_index:end_index]
-    
-    # find link indexes
-    positions = []
-    link_index = 0
-    substring = '<a href="/'
-    while True:
-        link_index = sub_html.find(substring, link_index)
-        if link_index == -1: 
-            break
-        link_index += len(substring)
-        positions.append(link_index)
 
-    # find links
-    i = 0
-    list_of_links = []
-    while i < len(positions):
-        sub_text = sub_html[positions[i]:]
-        end_index = sub_text.find('">')
-        link = sub_text[0:end_index]
-        list_of_links.append(link)
-        i += 1
+    # find <a> hrefs and remove all 'aria-label' links from list
+    soup = bs(sub_html, 'html.parser')
+    list_of_links = soup.find_all('a', href=True)
+    list_of_links = [link for i, link in enumerate(list_of_links) if not link.has_attr('aria-label')]
+    
     return list_of_links

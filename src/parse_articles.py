@@ -20,6 +20,7 @@ def parse_articles(secrets, links):
         article = html[start_index:html.find("■")]
         article.replace("\"", "''")
         article.replace("\n", "")
+        article.replace("\\n", "")
 
         articles.append([title, article, "https://www.economist.com/" + links[i],""])
         i += 1
