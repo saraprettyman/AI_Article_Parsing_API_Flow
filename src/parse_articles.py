@@ -16,10 +16,11 @@ def parse_articles(secrets, links):
 
         start_substring = ',"articleBody":"'
         start_index = html.find(start_substring) + len(start_substring)
-        html = html[start_index:]
-        end_index = html.find('","')
-        
-        article = html[start_index:end_index]
+
+        article = html[start_index:html.find("■")]
+        article.replace("\"", "''")
+        article.replace("\n", "")
+
         articles.append([title, article, "https://www.economist.com/" + links[i],""])
         i += 1
      # create a dataframe with each articles information

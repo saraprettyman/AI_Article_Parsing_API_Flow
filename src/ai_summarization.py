@@ -7,7 +7,7 @@ def post_api_query(secrets, article):
     service_endpoint = secrets['secrets']['azure_service_endpoint']
 
     # This URL is specific to my Azure account. You will need to create your own.
-    url = service_endpoint + "language/analyze-text?api-version=2023-04-01"
+    url = service_endpoint + "language/analyze-text/jobs?api-version=2023-04-01"
 
     payload = json.dumps(
         {
@@ -60,20 +60,22 @@ def ai_summarization(secrets, articles):
         if post_response.status_code == 202:
             op_location = post_response.headers['Operation-Location']
 
-            # retrieve response from operation location url
+            # retrieve response from operation location url, wait til response is complete
             in_progress = True
             while in_progress:
                 get_response = get_api_query(azure_api_key, op_location).text
                 if get_response.find('inProgress":1') == -1:
                     in_progress = False
-            
-            # parse response, add to data table
+
+            # parse response, add to data table. Check for errors
             start_substring = '"text":"'
             start_index = get_response.find(start_substring) + len(start_substring)
             end_index = get_response.find('","contexts":')
-            articles[i]['summary'] = get_response[start_index:end_index]
-            if get_response.find("cannot be generated") != -1:
-                articles[i]['summary'] = 'Text is too long. Must use another AI tool to summarize.'
+            
+            if end_index == -1:
+                articles[i]['summary'] = 'Invalid request.'
+            else: 
+                articles[i]['summary'] = get_response[start_index:end_index]
         else: 
             articles[i]['summary'] = 'Text is too long. Must use another AI tool to summarize.'
         i+=1
