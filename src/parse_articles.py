@@ -23,7 +23,7 @@ def parse_article(secrets, link):
     article = html[start_index:html.find("■")]
     
     # Replace unnecessary characters
-    article = article.replace("\"", "''").replace("\n", "").replace("\\n", "")
+    article = article.replace('\"', '"').replace("\n", "").replace("\\n", "").replace('"\ ','"')
 
     # Return the article information
     return [title, article, "https://www.economist.com/" + link, ""]
