@@ -5,6 +5,7 @@ def edition_page(secrets, edition_date):
     main_page_notionID = secrets['secrets']['parentPage_notionID']
     notion_api_key = secrets['secrets']['notion_api_key']
     key = 'Bearer ' + notion_api_key
+    weekly_edition = "https://www.economist.com/weeklyedition/" + edition_date
 
     url = "https://api.notion.com/v1/pages/"
 
@@ -23,7 +24,16 @@ def edition_page(secrets, edition_date):
                 }
             ]
             }
-        }
+        },
+        "children": [
+            {
+                "object": "block",
+                "type": "bookmark",
+                "bookmark": {
+                    "url": weekly_edition
+                }
+            }
+        ]
         }
     )
 
