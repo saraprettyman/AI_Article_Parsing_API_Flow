@@ -26,4 +26,4 @@ def parse_article(secrets, link):
     article = article.replace("\"", "''").replace("\n", "").replace("\\n", "")
 
     # Return the article information
-    return [title, article, "https://www.economist.com" + link, ""]
+    return [title, article, "https://www.economist.com/" + link, ""]
