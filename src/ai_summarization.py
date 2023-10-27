@@ -1,6 +1,7 @@
 import requests as r
 import pandas as pd
 import json
+import time
 
 def post_api_query(secrets, article):
     azure_api_key = secrets['secrets']['azure_api_key']
@@ -57,6 +58,7 @@ def ai_summarization(secrets, articles):
     while i < len(articles):
         # post query to azure, get operation location url 
         post_response = post_api_query(secrets, articles[i]['article'])
+        time.sleep(5)
         if post_response.status_code == 202:
             op_location = post_response.headers['Operation-Location']
 

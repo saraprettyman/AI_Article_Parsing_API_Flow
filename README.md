@@ -9,7 +9,7 @@ The packages imported into this program are as follows:
 * [Pandas](https://pandas.pydata.org/)
 * [Request](https://pypi.org/project/requests/)
 * [JSON](https://docs.python.org/3/library/json.html)
-* [BeautifulSoup](https://pypi.org/project/beautifulsoup4/)
+* [Time](https://docs.python.org/3/library/time.html)
 
 The YAML set up is already done in the *main.py* file of the program. The template is where you will add the values of the key-value pairs. The steps to get the values are below.  
 ### Microsoft Azure Language Service
