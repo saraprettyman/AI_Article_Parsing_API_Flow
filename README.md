@@ -2,7 +2,7 @@
 ## Description
 This program summarizes weekly editions of The Economist via API Integration. A GET API request retrieves The Economist weekly edition HTML, parses for individual article links, then parse each article for the title and article body. The summarization of the article is completed through Microsoft Azure Language Services. The title, link, and summarization of the article is then put into Notion pages via Notion's Internal API Integration. 
 ## Getting Started
-This program requires the installation of 4 packages and the set-up of 3 accounts. 
+This program requires the installation of 5 packages and the set-up of 3 accounts. 
 ### Dependencies
 The packages imported into this program are as follows:
 * [YAML](yaml.org)

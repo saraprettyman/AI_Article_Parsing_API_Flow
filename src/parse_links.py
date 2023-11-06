@@ -17,9 +17,14 @@ def get_html(secrets, subfolder):
 
     # Send a POST request to the login URL with the parameters
     response = session.post(website, data=payload)
-
+    
+    try:
     # The session is now logged in and can be used to retrieve content
-    response = session.get(website + subfolder)
+        response = session.get(website + subfolder)
+        response.raise_for_status()
+    except r.exceptions.TooManyRedirects:
+        print("Too many redirects encountered. Skipping...")
+        return None
 
     return response.text
 

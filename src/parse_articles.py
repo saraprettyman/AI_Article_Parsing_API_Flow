@@ -1,3 +1,5 @@
+import requests as r
+
 import pandas as pd 
 from parse_links import get_html
 
@@ -10,6 +12,9 @@ def parse_articles(secrets, links):
 def parse_article(secrets, link):
     # Get the HTML content of the article
     html = get_html(secrets, link)
+
+    if html == None:
+        return ["NA", "NA", "NA", "NA"]
 
     # Extract the title
     start_substring = '<!DOCTYPE html><html lang="en"><head><meta charSet="utf-8"/><meta name="viewport" content="width=device-width"/><title>'
