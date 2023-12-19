@@ -1,34 +1,29 @@
-import requests as r
-
-import pandas as pd 
+from bs4 import BeautifulSoup
+import pandas as pd
 from parse_links import get_html
 
-def parse_articles(secrets, links):
-    articles = [parse_article(secrets, link) for link in links]
+def parse_articles(secrets, article_links):
+    articles = []
+    for category in article_links:
+        for link in article_links[category]:
+            articles.append(parse_article(secrets, link, category))
 
-    # Create a dataframe with each article's information
-    return pd.DataFrame(articles, columns=["title", "article", "link", "summary"])
+    return pd.DataFrame(articles, columns=["category", "title", "article", "link", "summary"])
 
-def parse_article(secrets, link):
+def parse_article(secrets, link, category):
     # Get the HTML content of the article
     html = get_html(secrets, link)
+    soup = BeautifulSoup(html, 'html.parser')
 
-    if html == None:
-        return ["NA", "NA", "NA", "NA"]
+    # title
+    title = soup.find('title').string
 
-    # Extract the title
-    start_substring = '<!DOCTYPE html><html lang="en"><head><meta charSet="utf-8"/><meta name="viewport" content="width=device-width"/><title>'
-    start_index = html.find(start_substring) + len(start_substring)
-    end_index = html.find('</title>')
-    title = html[start_index:end_index]
+    # body 
+    article = ""
+    paragraphs = soup.find_all(lambda tag: tag.name == 'p' and tag.get('data-component') == 'paragraph')
+    for paragraph in paragraphs:
+        article += paragraph.text + "\n\n"
+    article = article.replace('\"', '"').replace("\n", "").replace("\\n", "").replace('"\ ','"').replace('\xa0', ' ')
 
-    # Extract the article
-    start_substring = ',"articleBody":"'
-    start_index = html.find(start_substring) + len(start_substring)
-    article = html[start_index:html.find("■")]
-    
-    # Replace unnecessary characters
-    article = article.replace('\"', '"').replace("\n", "").replace("\\n", "").replace('"\ ','"')
+    return [category, title, article, "https://www.economist.com" + link, ""]
 
-    # Return the article information
-    return [title, article, "https://www.economist.com/" + link, ""]

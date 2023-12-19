@@ -1,2 +1,4 @@
 config/configuration.yaml
 /testing
+summary.csv
+src/__pycache__

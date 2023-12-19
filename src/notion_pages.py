@@ -1,7 +1,7 @@
 import requests
 import json
 
-def edition_page(secrets, edition_date):
+def edition_page(secrets, edition_date, subheader):
     main_page_notionID = secrets['secrets']['parentPage_notionID']
     notion_api_key = secrets['secrets']['notion_api_key']
     key = 'Bearer ' + notion_api_key
@@ -32,6 +32,20 @@ def edition_page(secrets, edition_date):
                 "bookmark": {
                     "url": weekly_edition
                 }
+            },
+            {
+                "object": "block",
+                "type": "heading_3",
+                "heading_3": {
+                    "rich_text": [
+                        {
+                            "type": "text",
+                            "text": {
+                                "content": subheader
+                            }
+                        }
+                    ]
+                }
             }
         ]
         }
@@ -51,9 +65,11 @@ def subpages(secrets, page_info, parent_page_id):
     notion_api_key = secrets['secrets']['notion_api_key']
     key = 'Bearer ' + notion_api_key
     url = "https://api.notion.com/v1/pages/"
-    title = page_info[0]
-    link = page_info[2]
-    summary = page_info[3]
+    title = page_info['title']
+    article = page_info['article']
+    link = page_info['link']
+    summary = page_info['summary']
+    
 
     # Design of how each subpage will look 
     payload = json.dumps(
@@ -67,7 +83,7 @@ def subpages(secrets, page_info, parent_page_id):
                 {
                 "type": "text",
                 "text": {
-                    "content": page_info[0]
+                    "content": title
                 }
                 }
             ]
@@ -79,7 +95,7 @@ def subpages(secrets, page_info, parent_page_id):
                 "object": "block",
                 "type": "bookmark",
                 "bookmark": {
-                    "url": page_info[2]
+                    "url": link
                 }
             },
             {
@@ -118,10 +134,47 @@ def subpages(secrets, page_info, parent_page_id):
                         {
                             "type": "text",
                             "text": {
-                                "content": page_info[3]
+                                "content": summary
                             }
                         }
                     ]
+                }
+            }, 
+            {
+                "object": "block",
+                "type": "heading_3",
+                "heading_3": {
+                    "rich_text": [
+                        {
+                            "type": "text",
+                            "text": {
+                                "content": "Article"
+                            }
+                        }
+                    ]
+                }
+            },
+            {
+                "object": "block",
+                "type": "toggle",
+                "toggle": {
+                    "rich_text": [{
+                            "type": "text",
+                            "text": {
+                                "content": "Article"
+                            }
+                        }],
+                    "children": [{
+                        "type": "paragraph",
+                        "paragraph": {
+                            "rich_text": [{
+                                "type": "text",
+                                "text": {
+                                    "content": article
+                                }
+                            }]
+                        }
+                    }]
                 }
             }
         ]
@@ -138,14 +191,16 @@ def subpages(secrets, page_info, parent_page_id):
 
     return 0
 
-def notion_pages(secrets, edition_date, page_info):
+def notion_pages(secrets, edition_date, edition_title, page_info):
     i = 0
     # create parent page
-    parent_page_id = edition_page(secrets, edition_date)
+    parent_page_id = edition_page(secrets, edition_date, edition_title)
 
-    # create subpages
+    # create subpages by going through each item in the dictionary
     while i < len(page_info):
-        subpages(secrets, page_info.iloc[i], parent_page_id)
+        print(page_info[i])
+    while i < len(page_info):
+        subpages(secrets, page_info[i], parent_page_id)
         i += 1
     return 0
     

@@ -1,4 +1,6 @@
+from bs4 import BeautifulSoup
 import requests as r
+import logging as log
 
 def get_html(secrets, subfolder):
     username = secrets['secrets']['server_username']
@@ -23,41 +25,31 @@ def get_html(secrets, subfolder):
         response = session.get(website + subfolder)
         response.raise_for_status()
     except r.exceptions.TooManyRedirects:
-        print("Too many redirects encountered. Skipping...")
+        log.info("Page html retrival failed. Skipping...")
+        log.info("Page failed", website + subfolder)
         return None
-
     return response.text
 
-def parse_links(secrets, edition_date):
+def find_category_links(links, category):
+    return list(set(link for link in links if link.startswith('/' + category + '/')))
+
+def parse_for_links(secrets, edition_date):
     subfolder = 'weeklyedition/' + edition_date
 
     html = get_html(secrets, subfolder)
-  
-    # isolate the links that in a specific section of the webpage
-    start_substring = '<div class="teaser-weekly-edition--leaders css-12dw4ef ekfon2k0">'
-    start_index = html.find(start_substring) + len(start_substring)
-    end_index = html.find('</main>')
 
-    sub_html = html[start_index:end_index]
-    
-    # find link indexes
-    positions = []
-    link_index = 0
-    substring = '<a href="/'
-    while True:
-        link_index = sub_html.find(substring, link_index)
-        if link_index == -1: 
-            break
-        link_index += len(substring)
-        positions.append(link_index)
+    soup = BeautifulSoup(html, 'html.parser')
+    article_links = {}
 
-    # find links
-    i = 0
-    list_of_links = []
-    while i < len(positions):
-        sub_text = sub_html[positions[i]:]
-        end_index = sub_text.find('">')
-        link = sub_text[0:end_index]
-        list_of_links.append(link)
-        i += 1
-    return list_of_links
+    title = soup.find('title').string
+    links = [a['href'] for a in soup.find_all('a', href=True)]
+
+    categories = ['leaders', 'by-invitation', 'briefing', 'united-states', 'the-americas', 'asia', 
+                'china', 'middle-east-and-africa', 'europe', 'britain', 'international', 'business',
+                'finance-and-economics', 'science-and-technology', 'culture', 
+                'economic-and-financial-indicators', 'obituary']
+
+    for category in categories:
+        article_links[category] = find_category_links(links, category)
+
+    return title, article_links

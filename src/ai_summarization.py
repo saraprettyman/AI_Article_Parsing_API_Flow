@@ -68,6 +68,8 @@ def ai_summarization(secrets, articles):
                 get_response = get_api_query(azure_api_key, op_location).text
                 if get_response.find('inProgress":1') == -1:
                     in_progress = False
+                else: 
+                    time.sleep(2)
 
             # parse response, add to data table. Check for errors
             start_substring = '"text":"'
@@ -82,4 +84,4 @@ def ai_summarization(secrets, articles):
             articles[i]['summary'] = 'Text is too long. Must use another AI tool to summarize.'
         i+=1
     # dict form is no longer required; return to dataframe
-    return pd.DataFrame(articles)
+    return articles
