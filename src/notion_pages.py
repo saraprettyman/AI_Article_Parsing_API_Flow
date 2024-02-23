@@ -66,7 +66,7 @@ def subpages(secrets, page_info, parent_page_id):
     key = 'Bearer ' + notion_api_key
     url = "https://api.notion.com/v1/pages/"
     title = page_info['title']
-    article = page_info['article']
+    article = page_info['article'] # TODO Add article to subpage, accounting for character limit
     link = page_info['link']
     summary = page_info['summary']
     
@@ -170,7 +170,7 @@ def subpages(secrets, page_info, parent_page_id):
                             "rich_text": [{
                                 "type": "text",
                                 "text": {
-                                    "content": article
+                                    "content": "Go to Article"
                                 }
                             }]
                         }
@@ -191,16 +191,15 @@ def subpages(secrets, page_info, parent_page_id):
 
     return 0
 
-def notion_pages(secrets, edition_date, edition_title, page_info):
+def notion_pages(secrets, edition_date, edition_title, articles):
     i = 0
     # create parent page
     parent_page_id = edition_page(secrets, edition_date, edition_title)
 
-    # create subpages by going through each item in the dictionary
-    while i < len(page_info):
-        print(page_info[i])
-    while i < len(page_info):
-        subpages(secrets, page_info[i], parent_page_id)
+    while i < len(articles):
+        print(i)
+        print(articles[i]['title'])
+        subpages(secrets, articles[i], parent_page_id)
         i += 1
     return 0
     

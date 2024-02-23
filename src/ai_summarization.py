@@ -56,6 +56,7 @@ def ai_summarization(secrets, articles):
     azure_api_key = secrets['secrets']['azure_api_key']
 
     while i < len(articles):
+        print('Summarizing article ' + str(i + 1) + ' of ' + str(len(articles)))
         # post query to azure, get operation location url 
         post_response = post_api_query(secrets, articles[i]['article'])
         time.sleep(5)
