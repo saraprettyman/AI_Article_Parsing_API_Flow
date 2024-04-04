@@ -56,8 +56,7 @@ def ai_summarization(secrets, articles):
     azure_api_key = secrets['secrets']['azure_api_key']
 
     while i < len(articles):
-        print('Summarizing article ' + str(i + 1) + ' of ' + str(len(articles)))
-        # post query to azure, get operation location url 
+        print('Summarizing article ' + str(i + 1) + ' of ' + str(len(articles)) + ' [' + articles[i]['title'] + ']')
         post_response = post_api_query(secrets, articles[i]['article'])
         time.sleep(5)
         if post_response.status_code == 202:
@@ -70,7 +69,7 @@ def ai_summarization(secrets, articles):
                 if get_response.find('inProgress":1') == -1:
                     in_progress = False
                 else: 
-                    time.sleep(2)
+                    time.sleep(15)
 
             # parse response, add to data table. Check for errors
             start_substring = '"text":"'
